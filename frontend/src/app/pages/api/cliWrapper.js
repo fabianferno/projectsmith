@@ -8,9 +8,7 @@ function runCliCommand(userInput, callback) {
   console.log("Lilypad Starting...");
   console.log(userInput);
 
-  const web3PrivateKey =
-    process.env.WEB3_PRIVATE_KEY ||
-    "6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0";
+  const web3PrivateKey = process.env.WEB3_PRIVATE_KEY || "";
 
   if (!web3PrivateKey) {
     console.error("WEB3_PRIVATE_KEY is not set in the environment variables.");
