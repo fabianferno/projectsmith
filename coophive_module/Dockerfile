@@ -1,11 +1,6 @@
-FROM node:20-slim
-
+FROM node:16-slim
 WORKDIR /app
-
-COPY entrypoint.js package.json ./
-
+COPY . .
 RUN npm install
-
 EXPOSE 3000
-
-ENTRYPOINT ["node", "entrypoint.js"]
+CMD ["node", "entrypoint.js"]
