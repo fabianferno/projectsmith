@@ -1,8 +1,9 @@
 import { Contract, ethers, TransactionReceipt, Wallet } from 'ethers';
-import ABI from './abis/Agent.json';
+import ABI from './abis/AgentABI.json' assert { type: 'json' };
 import * as readline from 'readline';
 
-require('dotenv').config();
+import { config } from 'dotenv';
+config();
 
 async function main() {
   const rpcUrl = process.env.RPC_URL;
@@ -11,14 +12,16 @@ async function main() {
   if (!privateKey) throw Error('Missing PRIVATE_KEY in .env');
   const contractAddress = process.env.AGENT_CONTRACT_ADDRESS;
   if (!contractAddress) throw Error('Missing AGENT_CONTRACT_ADDRESS in .env');
+  const prompt = process.env.PROMPT;
+  if (!prompt) throw Error('Missing prompt in process args');
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const wallet = new Wallet(privateKey, provider);
   const contract = new Contract(contractAddress, ABI, wallet);
 
   // The query you want to start the agent with
-  const query = await getUserInput("Agent's task: ");
-  const maxIterations = await getUserInput('Max iterations: ');
+  const query = prompt;
+  const maxIterations = 1;
 
   // Call the startChat function
   const transactionResponse = await contract.runAgent(
@@ -26,12 +29,9 @@ async function main() {
     Number(maxIterations)
   );
   const receipt = await transactionResponse.wait();
-  console.log(`Task sent, tx hash: ${receipt.hash}`);
-  console.log(`Agent started with task: "${query}"`);
 
   // Get the agent run ID from transaction receipt logs
   let agentRunID = getAgentRunId(receipt, contract);
-  console.log(`Created agent run ID: ${agentRunID}`);
   if (!agentRunID && agentRunID !== 0) {
     return;
   }
@@ -47,44 +47,20 @@ async function main() {
     );
     if (newMessages) {
       for (let message of newMessages) {
-        let roleDisplay = message.role === 'assistant' ? 'THOUGHT' : 'STEP';
-        let color = message.role === 'assistant' ? '\x1b[36m' : '\x1b[33m'; // Cyan for thought, yellow for step
-        console.log(`${color}${roleDisplay}\x1b[0m: ${message.content}`);
-        allMessages.push(message);
+        if (message.role === 'assistant') {
+          console.log(message.content);
+          allMessages.push(message);
+        }
       }
     }
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    if (exitNextLoop) {
-      console.log(`agent run ID ${agentRunID} finished!`);
-      break;
-    }
     if (await contract.isRunFinished(agentRunID)) {
       exitNextLoop = true;
     }
-  }
-}
 
-async function getUserInput(query) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  const question = (query) => {
-    return new Promise((resolve) => {
-      rl.question(query, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
-
-  try {
-    const input = await question(query);
-    rl.close();
-    return input;
-  } catch (err) {
-    console.error('Error getting user input:', err);
-    rl.close();
+    if (exitNextLoop) {
+      break;
+    }
   }
 }
 
@@ -99,13 +75,12 @@ function getAgentRunId(receipt, contract) {
       }
     } catch (error) {
       // This log might not have been from your contract, or it might be an anonymous log
-      console.log('Could not parse log:', log);
     }
   }
   return agentRunID;
 }
 
-async function getNewMessages(contract, agentRunID, currentMessagesCountr) {
+async function getNewMessages(contract, agentRunID, currentMessagesCount) {
   const messages = await contract.getMessageHistoryContents(agentRunID);
   const roles = await contract.getMessageHistoryRoles(agentRunID);
 
@@ -121,4 +96,4 @@ async function getNewMessages(contract, agentRunID, currentMessagesCountr) {
   return newMessages;
 }
 
-main().then(() => console.log('Done'));
+main().then();
