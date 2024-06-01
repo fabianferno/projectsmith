@@ -1,0 +1,55 @@
+{
+    "machine": {
+        "gpu": 0,  // Update based on your needs
+        "cpu": 1000,
+        "ram": 8000
+    },
+    "job": {
+        "APIVersion": "V1beta1",
+        "Metadata": {
+            "CreatedAt": "2023-01-01T00:00:00Z",
+            "Requester": {}
+        },
+        "Spec": {
+            "Deal": {
+                "Concurrency": 1
+            },
+            "Docker": {
+                "Entrypoint": [
+                    "node", "entrypoint.js"
+                ],
+                "Image": "arthh/projectsmith:v0",  // Update with your actual Docker image
+                "EnvironmentVariables": [
+                    "PROMPT={{.PROMPT}}"
+                ]
+            },
+            "Engine": "Docker",
+            "Language": {
+                "JobContext": {}
+            },
+            "Network": {
+                "Type": "None"
+            },
+            "PublisherSpec": {
+                "Type": "IPFS"
+            },
+            "Resources": {
+                "CPU": "3",
+                "Memory": "3gb",
+                "GPU": "0"  // Assuming no GPU is required for Node.js application
+            },
+            "Timeout": 1800,
+            "Verifier": "Noop",
+            "Wasm": {
+Context": {}
+            },
+            "Outputs": [
+                {
+                    "Name": "outputs",
+                    "StorageSource": "IPFS",
+                    "Path": "/outputs"
+                }
+            ]
+        }
+    }
+}
