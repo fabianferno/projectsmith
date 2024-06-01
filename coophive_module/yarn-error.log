@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/artu/.nvm/versions/node/v20.13.1/bin/node /usr/local/bin/yarn init
+
+PATH: 
+  /Users/artu/.nvm/versions/node/v20.13.1/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/artu/.vscode-server/bin/0ee08df0cf4527e40edc9aa28f4b5bd38bbff2b2/bin/remote-cli:/Users/artu/.nvm/versions/node/v20.13.1/bin:/Users/artu/.zinit/polaris/bin:/Users/artu/.cargo/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  20.13.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:137143:13)
+      at Interface.emit (node:events:519:28)
+      at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1126:18)
+      at ReadStream.onkeypress (node:internal/readline/interface:265:20)
+      at ReadStream.emit (node:events:519:28)
+      at emitKeys (node:internal/readline/utils:371:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+      at ReadStream.emit (node:events:519:28)
+      at addChunk (node:internal/streams/readable:559:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

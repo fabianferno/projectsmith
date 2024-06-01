@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node ./src/index.ts\"",
+    "build": "tsc",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.13.0",
+    "@types/shelljs": "^0.8.15",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "shelljs": "^0.8.5",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2",
+    "ts-node": "^10.9.2"
+  }
+}
