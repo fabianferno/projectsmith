@@ -60,6 +60,14 @@ const ChatComponent = ({ data }: { data: any }) => {
   const handleMessageSubmit = async (e: React.FormEvent) => {
     console.log("Sending message...");
     e.preventDefault();
+
+    // Check if input contains the word agent
+    if (input.toLowerCase().includes("agent")) {
+      alert("Agent invoked");
+
+      // TODO: Agent Invoke call
+    }
+
     if (!input.trim()) return;
     const transactionResponse = await contract.addMessage(input, chatId!);
     const receipt = await transactionResponse.wait();
