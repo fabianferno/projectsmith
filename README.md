@@ -43,6 +43,13 @@ ProjectSmith is a Chrome extension designed to enhance and expand the functional
 5. **DeFi Actions and Validation**: CoopHive calls LLMs for validation, executes actions via the Squid Router, and ensures correctness with LilyPad.
 6. **Enhanced User Experience**: Users receive enriched and actionable insights directly within the Beryx Explorer interface, facilitated by the conversational AI assistant and automated agent actions.
 
+## Future Plans
+ - **Integrations with more blockchain explorers**
+ - **AgentActions marketplace**
+ - **Multi-chain support**
+ - **More fine-tuned crypto trained LLMs**
+
+
 ## Conclusion
 ProjectSmith integrates advanced AI and blockchain technologies to enhance user interaction with blockchain explorers. By combining data retrieval, AI processing, and automated actions, it provides a robust tool for users to engage with on-chain data efficiently and intelligently.
 
