@@ -1,6 +1,6 @@
 {
     "machine": {
-        "gpu": 0,  // Update based on your needs
+        "gpu": 0, 
         "cpu": 1000,
         "ram": 8000
     },
@@ -16,9 +16,9 @@
             },
             "Docker": {
                 "Entrypoint": [
-                    "node", "entrypoint.js"
+                    "node entrypoint.js"
                 ],
-                "Image": "arthh/projectsmith:v0",  // Update with your actual Docker image
+                "Image": "leofranklin1509/projectsmith@sha256:7192a0f26a073747547d8f04a63df13c93596a0bea15bccc10ef88244fc89242",
                 "EnvironmentVariables": [
                     "PROMPT={{.PROMPT}}"
                 ]
@@ -34,14 +34,13 @@
                 "Type": "IPFS"
             },
             "Resources": {
-                "CPU": "3",
-                "Memory": "3gb",
-                "GPU": "0"  // Assuming no GPU is required for Node.js application
+
+                "GPU": "0"  
             },
             "Timeout": 1800,
             "Verifier": "Noop",
             "Wasm": {
-Context": {}
+                "EntryModule": {}
             },
             "Outputs": [
                 {

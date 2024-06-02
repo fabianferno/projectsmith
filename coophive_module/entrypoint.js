@@ -1,16 +1,19 @@
 import { Contract, ethers, TransactionReceipt, Wallet } from 'ethers';
 import ABI from './abis/AgentABI.json' assert { type: 'json' };
 import * as readline from 'readline';
+import fs from 'fs/promises'; // Use the promise-based version of fs
 
 import { config } from 'dotenv';
+import path from 'path';
 config();
 
 async function main() {
-  const rpcUrl = process.env.RPC_URL;
+  const rpcUrl = 'https://devnet.galadriel.com';
   if (!rpcUrl) throw Error('Missing RPC_URL in .env');
-  const privateKey = process.env.PRIVATE_KEY;
+  const privateKey =
+    '0a8131d053cdf11a2a4ac0d306cee278ffbad0074e597fb10db5e55afb32667f';
   if (!privateKey) throw Error('Missing PRIVATE_KEY in .env');
-  const contractAddress = process.env.AGENT_CONTRACT_ADDRESS;
+  const contractAddress = '0xF757B73165820b1DD00E4F0a36a6ea17aD89A15a';
   if (!contractAddress) throw Error('Missing AGENT_CONTRACT_ADDRESS in .env');
   const prompt = process.env.PROMPT;
   if (!prompt) throw Error('Missing prompt in process args');
@@ -49,7 +52,7 @@ async function main() {
       for (let message of newMessages) {
         if (message.role === 'assistant') {
           console.log(message.content);
-          allMessages.push(message);
+          allMessages.push(message.content);
         }
       }
     }
@@ -62,6 +65,17 @@ async function main() {
       break;
     }
   }
+
+  console.log('allMessages', allMessages);
+  if (allMessages.length) {
+    console.log('Start of reply -  ', allMessages, ' - end of reply');
+    await fs.writeFile(
+      './outputs/response.json',
+      JSON.stringify(allMessages, null, 2),
+      'utf-8'
+    );
+    console.log('File has been saved successfully.');
+  }
 }
 
 function getAgentRunId(receipt, contract) {
@@ -70,12 +84,9 @@ function getAgentRunId(receipt, contract) {
     try {
       const parsedLog = contract.interface.parseLog(log);
       if (parsedLog && parsedLog.name === 'AgentRunCreated') {
-        // Second event argument
         agentRunID = ethers.toNumber(parsedLog.args[1]);
       }
-    } catch (error) {
-      // This log might not have been from your contract, or it might be an anonymous log
-    }
+    } catch (error) {}
   }
   return agentRunID;
 }

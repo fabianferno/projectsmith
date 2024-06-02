@@ -1,5 +1,10 @@
 FROM node:16-slim
-WORKDIR .
+
+RUN mkdir /app
+WORKDIR /app
+
+RUN mkdir -p /outputs
+
 COPY . .
 RUN npm install
 EXPOSE 3000
