@@ -72,7 +72,7 @@ app.post("/prompt", async (req, res) => {
   }
 
   if (!match) {
-    finalPrompt = ` docker run -e INPUT="${p" leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b`;
+    finalPrompt = ` docker run -e INPUT="${prompt}" leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b`;
     output = shell.exec(finalPrompt);
     // regex = /(?<=Start of reply - ).*?(?= - end of reply)/;
     console.log(output.stdout);
