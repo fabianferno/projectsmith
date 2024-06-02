@@ -1,22 +1,22 @@
-import { Contract, ethers, TransactionReceipt, Wallet } from 'ethers';
-import ABI from './abis/AgentABI.json' assert { type: 'json' };
-import * as readline from 'readline';
-import fs from 'fs/promises'; // Use the promise-based version of fs
+import { Contract, ethers, TransactionReceipt, Wallet } from "ethers";
+import ABI from "./abis/AgentABI.json" assert { type: "json" };
+import * as readline from "readline";
+import fs from "fs/promises"; // Use the promise-based version of fs
 
-import { config } from 'dotenv';
-import path from 'path';
+import { config } from "dotenv";
+import path from "path";
 config();
 
 async function main() {
-  const rpcUrl = 'https://devnet.galadriel.com';
-  if (!rpcUrl) throw Error('Missing RPC_URL in .env');
+  const rpcUrl = "https://devnet.galadriel.com";
+  if (!rpcUrl) throw Error("Missing RPC_URL in .env");
   const privateKey =
-    '0a8131d053cdf11a2a4ac0d306cee278ffbad0074e597fb10db5e55afb32667f';
-  if (!privateKey) throw Error('Missing PRIVATE_KEY in .env');
-  const contractAddress = '0xF757B73165820b1DD00E4F0a36a6ea17aD89A15a';
-  if (!contractAddress) throw Error('Missing AGENT_CONTRACT_ADDRESS in .env');
+    "698ffa7b9ef6e9368120761d5e5550b29f12810209efa1c0044c413b8840cdda";
+  if (!privateKey) throw Error("Missing PRIVATE_KEY in .env");
+  const contractAddress = "0xF757B73165820b1DD00E4F0a36a6ea17aD89A15a";
+  if (!contractAddress) throw Error("Missing AGENT_CONTRACT_ADDRESS in .env");
   const prompt = process.env.PROMPT;
-  if (!prompt) throw Error('Missing prompt in process args');
+  if (!prompt) throw Error("Missing prompt in process args");
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const wallet = new Wallet(privateKey, provider);
@@ -50,9 +50,9 @@ async function main() {
     );
     if (newMessages) {
       for (let message of newMessages) {
-        if (message.role === 'assistant') {
+        if (message.role === "assistant") {
           console.log(message.content);
-          allMessages.push(message.content);
+          allMessages.push(message);
         }
       }
     }
@@ -66,16 +66,24 @@ async function main() {
     }
   }
 
-  console.log('allMessages', allMessages);
-  if (allMessages.length) {
-    console.log('Start of reply -  ', allMessages, ' - end of reply');
-    await fs.writeFile(
-      './outputs/response.json',
+  console.log(allMessages);
+  await fs
+    .writeFile(
+      "./outputs/response.json",
       JSON.stringify(allMessages, null, 2),
-      'utf-8'
-    );
-    console.log('File has been saved successfully.');
-  }
+      "utf-8"
+    )
+    .then(() => {
+      console.log("File has been saved successfully.");
+      return fs.readFile("./outputs/response.json", "utf-8");
+    })
+    .then((data) => {
+      console.log("File content:", data);
+    })
+    .catch((error) => {
+      console.error("Error reading file:", error);
+    });
+  // console.log("File has been saved successfully.");
 }
 
 function getAgentRunId(receipt, contract) {
@@ -83,10 +91,13 @@ function getAgentRunId(receipt, contract) {
   for (const log of receipt.logs) {
     try {
       const parsedLog = contract.interface.parseLog(log);
-      if (parsedLog && parsedLog.name === 'AgentRunCreated') {
+      if (parsedLog && parsedLog.name === "AgentRunCreated") {
+        // Second event argument
         agentRunID = ethers.toNumber(parsedLog.args[1]);
       }
-    } catch (error) {}
+    } catch (error) {
+      // This log might not have been from your contract, or it might be an anonymous log
+    }
   }
   return agentRunID;
 }

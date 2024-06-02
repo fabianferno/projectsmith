@@ -2,7 +2,7 @@
     "machine": {
         "gpu": 0, 
         "cpu": 1000,
-        "ram": 8000
+        "ram": 100
     },
     "job": {
         "APIVersion": "V1beta1",
@@ -18,7 +18,7 @@
                 "Entrypoint": [
                     "node entrypoint.js"
                 ],
-                "Image": "leofranklin1509/projectsmith@sha256:7192a0f26a073747547d8f04a63df13c93596a0bea15bccc10ef88244fc89242",
+                "Image": "leofranklin1509/projectsmith@sha256:e891ad19a163577d63af6ad79e135b03cc6dba2dbe35832f7335280b80486bca",
                 "EnvironmentVariables": [
                     "PROMPT={{.PROMPT}}"
                 ]
@@ -52,3 +52,4 @@
         }
     }
 }
+
