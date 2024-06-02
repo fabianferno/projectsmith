@@ -1,55 +1,46 @@
 {
-    "machine": {
-        "gpu": 0, 
-        "cpu": 1000,
-        "ram": 100
+  "machine": {
+    "gpu": 0,
+    "cpu": 1000,
+    "ram": 100
+  },
+  "job": {
+    "APIVersion": "V1beta1",
+    "Metadata": {
+      "CreatedAt": "2023-01-01T00:00:00Z",
+      "Requester": {}
     },
-    "job": {
-        "APIVersion": "V1beta1",
-        "Metadata": {
-            "CreatedAt": "2023-01-01T00:00:00Z",
-            "Requester": {}
-        },
-        "Spec": {
-            "Deal": {
-                "Concurrency": 1
-            },
-            "Docker": {
-                "Entrypoint": [
-                    "node entrypoint.js"
-                ],
-                "Image": "leofranklin1509/projectsmith@sha256:e891ad19a163577d63af6ad79e135b03cc6dba2dbe35832f7335280b80486bca",
-                "EnvironmentVariables": [
-                    "PROMPT={{.PROMPT}}"
-                ]
-            },
-            "Engine": "Docker",
-            "Language": {
-                "JobContext": {}
-            },
-            "Network": {
-                "Type": "None"
-            },
-            "PublisherSpec": {
-                "Type": "IPFS"
-            },
-            "Resources": {
-
-                "GPU": "0"  
-            },
-            "Timeout": 1800,
-            "Verifier": "Noop",
-            "Wasm": {
-                "EntryModule": {}
-            },
-            "Outputs": [
-                {
-                    "Name": "outputs",
-                    "StorageSource": "IPFS",
-                    "Path": "/outputs"
-                }
-            ]
-        }
+    "Spec": {
+      "Deal": {
+        "Concurrency": 1
+      },
+      "Docker": {
+        "Entrypoint": [
+          "node entrypoint.js"
+        ],
+        "Image": "leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b",
+        "EnvironmentVariables": [
+          "INPUT={{.INPUT}}"
+        ]
+      },
+      "Engine": "Docker",
+      "Language": {
+        "JobContext": {}
+      },
+      "Network": {
+        "Type": "None"
+      },
+      "PublisherSpec": {
+        "Type": "IPFS"
+      },
+      "Resources": {
+        "GPU": "0"
+      },
+      "Timeout": 1800,
+      "Verifier": "Noop",
+      "Wasm": {
+        "EntryModule": {}
+      }
     }
+  }
 }
-
