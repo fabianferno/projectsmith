@@ -64,13 +64,14 @@ const ChatComponent = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const initializeChat = async () => {
       if (chatId === null) {
+        alert("Starting chat with current context...");
         const transactionResponse = await contract.startChat(`
-        You are a blockchain data analyst and your task is to analyze the following data:
+            You are a blockchain data analyst and your task is to analyze the following data:
 
-        ${JSON.stringify(data)}
+            ${JSON.stringify(data)}
 
-        Use the context and answer my following questions:
-    `);
+            Use the context and answer my following questions:
+        `);
         const receipt = await transactionResponse.wait();
         const newChatId = getChatId(receipt, contract);
         setChatId(newChatId);
@@ -80,6 +81,7 @@ const ChatComponent = ({
     initializeChat();
   }, [chatId]);
   const handleMessageSubmit = async e => {
+    console.log("Sending message...");
     e.preventDefault();
     if (!input.trim()) return;
     const transactionResponse = await contract.addMessage(input, chatId);
@@ -89,13 +91,18 @@ const ChatComponent = ({
     setInput("");
   };
   const fetchMessages = async () => {
-    const messages = await contract.getMessageHistoryContents(chatId);
-    const roles = await contract.getMessageHistoryRoles(chatId);
-    const newMessages = messages.map((message, i) => ({
-      role: roles[i],
-      content: message
-    }));
-    setMessages(newMessages);
+    console.log("Fetching messages...");
+    try {
+      const messages = await contract.getMessageHistoryContents(chatId);
+      const roles = await contract.getMessageHistoryRoles(chatId);
+      const newMessages = messages.map((message, i) => ({
+        role: roles[i],
+        content: message
+      }));
+      setMessages(newMessages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
   const handleInputChange = e => {
     setInput(e.target.value);
@@ -105,7 +112,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83,
+      lineNumber: 90,
       columnNumber: 10
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
@@ -114,7 +121,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84,
+      lineNumber: 91,
       columnNumber: 7
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -126,7 +133,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 85,
+      lineNumber: 92,
       columnNumber: 9
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -135,7 +142,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 86,
+      lineNumber: 93,
       columnNumber: 9
     }
   }, "\uD83D\uDD03"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -144,7 +151,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 89,
+      lineNumber: 96,
       columnNumber: 9
     }
   }, "Send Message")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
@@ -155,7 +162,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 93,
+      lineNumber: 100,
       columnNumber: 7
     }
   }, messages.map((msg, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
@@ -164,14 +171,14 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96,
+      lineNumber: 103,
       columnNumber: 39
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 97,
+      lineNumber: 104,
       columnNumber: 13
     }
   }, msg.role, ":"), " ", msg.content))));
@@ -232,9 +239,9 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ /* webpack/runtime/getFullHash */
 /******/ (() => {
-/******/ 	__webpack_require__.h = () => ("b98e1a8c2f4658eb6444")
+/******/ 	__webpack_require__.h = () => ("3d45f091220cdfcd72bb")
 /******/ })();
 /******/ 
 /******/ }
 );
-//# sourceMappingURL=content-0.f87e7c9529893d832f58.hot-update.js.map
+//# sourceMappingURL=content-0.f812fcbe6b8a012ba7c7.hot-update.js.map

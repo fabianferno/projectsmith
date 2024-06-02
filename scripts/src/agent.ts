@@ -1,142 +1,140 @@
-import { Squid } from "@0xsquid/sdk"; // Import Squid SDK
-import { ethers } from "ethers"; // Import ethers library
-import * as dotenv from "dotenv"; // Import dotenv for environment variables
-dotenv.config(); // Load environment variables from .env file
+import { Contract, Wallet, TransactionReceipt } from "ethers";
+import { ethers } from "ethers";
+import { performSwap } from "./swapHelper";
+import { ABI } from "./consts";
+import axios from "axios";
 
-// Retrieve environment variables
-const privateKey: string = process.env.PRIVATE_KEY!;
-const integratorId: string = process.env.INTEGRATOR_ID!;
-const FROM_CHAIN_RPC: string = process.env.FROM_CHAIN_RPC_ENDPOINT!;
+const GALARIEL_RPC_URL = "https://devnet.galadriel.com";
 
-if (!privateKey || !integratorId || !FROM_CHAIN_RPC) {
-  console.error(
-    "Missing environment variables. Ensure PRIVATE_KEY, INTEGRATOR_ID, and FROM_CHAIN_RPC_ENDPOINT are set."
+let chatId: number | null = null;
+let messages: any = [];
+
+async function getGasInfo() {
+  // Gives gas used in txs for all addresses at fixed frequency
+
+  const gasData = await axios.get(
+    `https://api.zondax.ch/fil/data/v3/mainnet/stats/gas-used/global/weekly?sort_by=bucket%3Aasc`,
+    {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.BERYX_TOKEN}`,
+      },
+    }
   );
-  process.exit(1);
+
+  return gasData.data;
 }
 
-// Define chain and token addresses
-// Sepolia
-const fromChainId = "11155111"; // Sepolia chain ID
-const toChainId = "534351"; // Scroll Testnet
-const fromToken = "0x254d06f33bDc5b8ee05b2ea472107E300226659A"; //
-const toToken = "0x5300000000000000000000000000000000000004"; //
+const initializeChat = async (contract: Contract) => {
+  const gasData = await getGasInfo();
 
-// Define the amount to be sent (in smallest unit, e.g., wei for Ethereum)
-const amount = "1000000000000000"; // 0.0001 USDT
+  if (chatId === null) {
+    alert("Starting chat with current context...");
+    const transactionResponse = await contract.startChat(`
+          You are a blockchain data  analyst and your task is to analyze the following data:
 
-// Set up JSON RPC provider and signer using the private key and RPC URL
-const provider = new ethers.providers.JsonRpcProvider(FROM_CHAIN_RPC);
-const signer = new ethers.Wallet(privateKey, provider);
+            ${JSON.stringify(gasData)}
 
-// Initialize the Squid client with the base URL and integrator ID
-const getSDK = (): Squid => {
-  const squid = new Squid({
-    baseUrl: "https://testnet.api.squidrouter.com",
-    integratorId: integratorId,
-  });
-  console.log(squid.tokens);
-  return squid;
+            Use the context and return only yes or no. Is it advisable to make a swap this week? 
+      `);
+    const receipt = await transactionResponse.wait();
+    const newChatId = getChatId(receipt, contract);
+    chatId = newChatId;
+    console.log(`Chat started with ID: ${newChatId}`);
+  }
 };
 
-// Main function
-(async () => {
-  // Initialize Squid SDK
-  const squid = getSDK();
-  await squid.init();
-  console.log("Initialized Squid SDK");
-
-  // Set up parameters for swapping tokens
-  const params = {
-    fromAddress: signer.address,
-    fromChain: fromChainId,
-    fromToken: fromToken,
-    fromAmount: amount,
-    toChain: toChainId,
-    toToken: toToken,
-    toAddress: signer.address,
-    slippageConfig: {
-      autoMode: 1,
-    },
-    enableBoost: true,
-  };
-
-  console.log("Parameters:", params); // Printing the parameters for QA
-
-  // Get the swap route using Squid SDK
-  const { route, requestId } = await squid.getRoute(params as any);
-  console.log("Calculated route:", route.estimate.toAmount);
-
-  // Execute the swap transaction
-  const tx = (await squid.executeRoute({
-    signer,
-    route,
-  })) as unknown as ethers.providers.TransactionResponse;
-  const txReceipt = await tx.wait();
-
-  // Show the transaction receipt with Axelarscan link
-  const axelarScanLink =
-    "https://axelarscan.io/gmp/" + txReceipt?.transactionHash;
-  console.log(`Finished! Check Axelarscan for details: ${axelarScanLink}`);
-
-  // Wait a few seconds before checking the status
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
-  // Parameters for checking the status of the transaction
-  const getStatusParams = {
-    transactionId: txReceipt?.transactionHash,
-    requestId: requestId,
-    integratorId: integratorId,
-    fromChainId: fromChainId,
-    toChainId: toChainId,
-  };
-
-  const completedStatuses = [
-    "success",
-    "partial_success",
-    "needs_gas",
-    "not_found",
-  ];
-  const maxRetries = 10; // Maximum number of retries for status check
-  let retryCount = 0;
-  let status = await squid.getStatus(getStatusParams as any);
-
-  // Loop to check the transaction status until it is completed or max retries are reached
-  console.log(`Initial route status: ${status.squidTransactionStatus}`);
-
-  do {
+function getChatId(
+  receipt: TransactionReceipt,
+  contract: Contract
+): number | null {
+  for (const log of receipt.logs) {
     try {
-      // Wait a few seconds before checking the status
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      const parsedLog = contract.interface.parseLog(log);
+      if (parsedLog && parsedLog.name === "ChatCreated") {
+        return parseInt(parsedLog.args[1]);
+      }
+    } catch (error) {
+      console.error("Could not parse log:", log);
+    }
+  }
+  return null;
+}
 
-      // Retrieve the transaction's route status
-      status = await squid.getStatus(getStatusParams as any);
+const fetchMessages = async (contract: Contract) => {
+  console.log("Fetching messages...");
+  try {
+    const messagesHistory = await contract.getMessageHistoryContents(chatId!);
+    const roles = await contract.getMessageHistoryRoles(chatId!);
+    const newMessages = messagesHistory.map((message: string, i: number) => ({
+      role: roles[i],
+      content: message,
+    }));
 
-      // Display the route status
-      console.log(`Route status: ${status.squidTransactionStatus}`);
-    } catch (error: unknown) {
-      // Handle error if the transaction status is not found
-      if (
-        error instanceof Error &&
-        (error as any).response &&
-        (error as any).response.status === 404
-      ) {
-        retryCount++;
-        if (retryCount >= maxRetries) {
-          console.error("Max retries reached. Transaction not found.");
+    console.log("Messages fetched:", newMessages);
+    messages = newMessages;
+    return newMessages;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
+};
+
+const addMessage = async (
+  contract: Contract,
+  input: string,
+  setInput: Function
+) => {
+  console.log("Sending message...");
+
+  if (!input.trim()) return;
+  const transactionResponse = await contract.addMessage(input, chatId!);
+  const receipt = await transactionResponse.wait();
+  console.log(`Message sent, tx hash: ${receipt.transactionHash}`);
+  await fetchMessages(contract);
+};
+
+async function main() {
+  const privateKey = process.env.PRIVATE_KEY;
+  const contractAddress = "0xbb28197bccAA45A19dBedC67eFf63c86Ac92Fd2b";
+
+  const provider = new ethers.JsonRpcProvider(GALARIEL_RPC_URL);
+  const wallet = new Wallet(privateKey!, provider);
+  const contract = new Contract(contractAddress, ABI, wallet);
+
+  let iterations = 5;
+
+  await initializeChat(contract);
+
+  // TODO: AI Agent to run the swap if the based on the gas data from getGasInfo
+  while (true) {
+    iterations--;
+    if (iterations === 0) {
+      break;
+    }
+
+    const messages = await fetchMessages(contract);
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === "user") {
+        const message = lastMessage.content;
+        if (message.toLowerCase() === "yes") {
+          await performSwap();
           break;
         }
-        console.log("Transaction not found. Retrying...");
-        continue;
-      } else {
-        throw error;
       }
     }
-  } while (
-    status &&
-    !completedStatuses.includes(status?.squidTransactionStatus as any)
-  );
 
-  // Wait for the transaction to be mined
-  console.log("Swap transaction executed:", txReceipt?.transactionHash);
-})();
+    // Analyze again
+    await addMessage(
+      contract,
+      `
+            Can you analyze the gas data again and provide a recommendation? - Only return yes/no
+        `,
+      () => {}
+    );
+
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+}
+
+main();

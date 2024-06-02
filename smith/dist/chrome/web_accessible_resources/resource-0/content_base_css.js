@@ -584,6 +584,10 @@ video {
 .z-20 {
   z-index: 20;
 }
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -591,10 +595,6 @@ video {
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-.mx-1 {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
 }
 .mb-12 {
   margin-bottom: 3rem;

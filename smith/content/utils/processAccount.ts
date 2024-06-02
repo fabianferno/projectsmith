@@ -31,6 +31,8 @@ export default async function processAccount(address: string) {
     }
   );
 
+  console.log("address: ", address);
+
   return {
     address: address,
     balance: balance.data,

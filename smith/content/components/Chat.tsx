@@ -40,13 +40,14 @@ const ChatComponent = ({ data }: { data: any }) => {
   useEffect(() => {
     const initializeChat = async () => {
       if (chatId === null) {
+        alert("Starting chat with current context...");
         const transactionResponse = await contract.startChat(`
-        You are a blockchain data analyst and your task is to analyze the following data:
+            You are a blockchain data analyst and your task is to analyze the following data:
 
-        ${JSON.stringify(data)}
+            ${JSON.stringify(data)}
 
-        Use the context and answer my following questions:
-    `);
+            Use the context and answer my following questions:
+        `);
         const receipt = await transactionResponse.wait();
         const newChatId = getChatId(receipt, contract);
         setChatId(newChatId);
@@ -57,6 +58,7 @@ const ChatComponent = ({ data }: { data: any }) => {
   }, [chatId]);
 
   const handleMessageSubmit = async (e: React.FormEvent) => {
+    console.log("Sending message...");
     e.preventDefault();
     if (!input.trim()) return;
     const transactionResponse = await contract.addMessage(input, chatId!);
@@ -67,14 +69,19 @@ const ChatComponent = ({ data }: { data: any }) => {
   };
 
   const fetchMessages = async () => {
-    const messages = await contract.getMessageHistoryContents(chatId!);
-    const roles = await contract.getMessageHistoryRoles(chatId!);
-    const newMessages = messages.map((message: string, i: number) => ({
-      role: roles[i],
-      content: message,
-    }));
+    console.log("Fetching messages...");
+    try {
+      const messages = await contract.getMessageHistoryContents(chatId!);
+      const roles = await contract.getMessageHistoryRoles(chatId!);
+      const newMessages = messages.map((message: string, i: number) => ({
+        role: roles[i],
+        content: message,
+      }));
 
-    setMessages(newMessages);
+      setMessages(newMessages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

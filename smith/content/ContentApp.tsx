@@ -57,10 +57,11 @@ export default function ContentApp() {
     const url = window.location.href;
     const currentItem = await parseUrlToJson(url);
     alert(
-      "Smith is ready to help you!: " +
-        currentItem.type +
-        " " +
-        JSON.stringify(currentItem.value)
+      "Smith is ready to help you!"
+      //  +
+      //   currentItem.type +
+      //   " " +
+      //   JSON.stringify(currentItem.value)
     );
 
     setCurrentData(currentItem);

@@ -77,7 +77,12 @@ function ContentApp() {
     // Get URL of the current tab
     const url = window.location.href;
     const currentItem = await parseUrlToJson(url);
-    alert("Smith is ready to help you!: " + currentItem.type + " " + JSON.stringify(currentItem.value));
+    alert("Smith is ready to help you!"
+    //  +
+    //   currentItem.type +
+    //   " " +
+    //   JSON.stringify(currentItem.value)
+    );
     setCurrentData(currentItem);
     setChatActive(true);
   }
@@ -87,7 +92,7 @@ function ContentApp() {
       __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 58,
+        lineNumber: 63,
         columnNumber: 12
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -96,7 +101,7 @@ function ContentApp() {
       __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 59,
+        lineNumber: 64,
         columnNumber: 9
       }
     }, "Call Smith ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
@@ -104,7 +109,7 @@ function ContentApp() {
       __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 60,
+        lineNumber: 65,
         columnNumber: 22
       }
     }, "+")));
@@ -113,7 +118,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64,
+      lineNumber: 69,
       columnNumber: 10
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -121,14 +126,14 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65,
+      lineNumber: 70,
       columnNumber: 7
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_3__["default"], {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 71,
       columnNumber: 9
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -136,7 +141,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67,
+      lineNumber: 72,
       columnNumber: 11
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -144,7 +149,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68,
+      lineNumber: 73,
       columnNumber: 13
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -152,7 +157,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
+      lineNumber: 74,
       columnNumber: 15
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
@@ -162,7 +167,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 70,
+      lineNumber: 75,
       columnNumber: 17
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
@@ -170,7 +175,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72,
+      lineNumber: 77,
       columnNumber: 15
     }
   }, "Chat with Smith, the crypto AI assistant"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
@@ -178,7 +183,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 75,
+      lineNumber: 80,
       columnNumber: 15
     }
   }, "Smith is a conversational AI assistant that helps you with your crypto explorations. You can ask Smith about the tx / address."), !chatActive ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -187,7 +192,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 79,
+      lineNumber: 84,
       columnNumber: 30
     }
   }, "Call Smith for this tx/address") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Chat__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -195,14 +200,14 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 81,
+      lineNumber: 86,
       columnNumber: 29
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82,
+      lineNumber: 87,
       columnNumber: 15
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -211,7 +216,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83,
+      lineNumber: 88,
       columnNumber: 17
     }
   }, "Click to send smith away."))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -219,7 +224,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 88,
+      lineNumber: 93,
       columnNumber: 13
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
@@ -231,7 +236,7 @@ function ContentApp() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 89,
+      lineNumber: 94,
       columnNumber: 15
     }
   }))))));
@@ -398,13 +403,14 @@ const ChatComponent = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const initializeChat = async () => {
       if (chatId === null) {
+        alert("Starting chat with current context...");
         const transactionResponse = await contract.startChat(`
-        You are a blockchain data analyst and your task is to analyze the following data:
+            You are a blockchain data analyst and your task is to analyze the following data:
 
-        ${JSON.stringify(data)}
+            ${JSON.stringify(data)}
 
-        Use the context and answer my following questions:
-    `);
+            Use the context and answer my following questions:
+        `);
         const receipt = await transactionResponse.wait();
         const newChatId = getChatId(receipt, contract);
         setChatId(newChatId);
@@ -414,6 +420,7 @@ const ChatComponent = ({
     initializeChat();
   }, [chatId]);
   const handleMessageSubmit = async e => {
+    console.log("Sending message...");
     e.preventDefault();
     if (!input.trim()) return;
     const transactionResponse = await contract.addMessage(input, chatId);
@@ -423,13 +430,18 @@ const ChatComponent = ({
     setInput("");
   };
   const fetchMessages = async () => {
-    const messages = await contract.getMessageHistoryContents(chatId);
-    const roles = await contract.getMessageHistoryRoles(chatId);
-    const newMessages = messages.map((message, i) => ({
-      role: roles[i],
-      content: message
-    }));
-    setMessages(newMessages);
+    console.log("Fetching messages...");
+    try {
+      const messages = await contract.getMessageHistoryContents(chatId);
+      const roles = await contract.getMessageHistoryRoles(chatId);
+      const newMessages = messages.map((message, i) => ({
+        role: roles[i],
+        content: message
+      }));
+      setMessages(newMessages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
   const handleInputChange = e => {
     setInput(e.target.value);
@@ -439,7 +451,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83,
+      lineNumber: 90,
       columnNumber: 10
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
@@ -448,7 +460,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84,
+      lineNumber: 91,
       columnNumber: 7
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -460,7 +472,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 85,
+      lineNumber: 92,
       columnNumber: 9
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -469,7 +481,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 86,
+      lineNumber: 93,
       columnNumber: 9
     }
   }, "\uD83D\uDD03"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -478,7 +490,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 89,
+      lineNumber: 96,
       columnNumber: 9
     }
   }, "Send Message")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
@@ -489,7 +501,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 93,
+      lineNumber: 100,
       columnNumber: 7
     }
   }, messages.map((msg, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
@@ -498,14 +510,14 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96,
+      lineNumber: 103,
       columnNumber: 39
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 97,
+      lineNumber: 104,
       columnNumber: 13
     }
   }, msg.role, ":"), " ", msg.content))));
@@ -742,6 +754,7 @@ async function processAccount(address) {
       Authorization: `Bearer ${"eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MjI0NTcwNzcsImp0aSI6IkZhYmlhbiBGZXJubyxoZWxsb0BmYWJpYW5mZXJuby5jb20ifQ.J6JRiHmB7TGfuKa0I_2Gatix8MsT1UpqNbZa6UuBzzFLUPQViTk1I7bcj-FcVp5TsYMFNvpFTImzzmPkQFAMKw"}`
     }
   });
+  console.log("address: ", address);
   return {
     address: address,
     balance: balance.data,
@@ -75719,7 +75732,7 @@ module.exports = JSON.parse('[{"inputs":[{"internalType":"address","name":"initi
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b98e1a8c2f4658eb6444")
+/******/ 		__webpack_require__.h = () => ("3d45f091220cdfcd72bb")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
