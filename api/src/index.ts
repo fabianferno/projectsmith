@@ -32,7 +32,7 @@ app.post("/prompt", async (req, res) => {
     `export WEB3_PRIVATE_KEY=6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0`
   );
 
-  let finalPrompt = `export WEB3_PRIVATE_KEY=6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0 && hive run github.com/LeoFranklin015/coophiveAgent:36096417addee425f9ece97a5087179a8df89cb4 -i PromptEnv="PROMPT=${prompt}" `;
+  let finalPrompt = `export WEB3_PRIVATE_KEY=6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0 && hive run github.com/LeoFranklin015/coophiveAgent:2f6236e0379eb112adfcb96dea2c66bbf71fc42c -i PromptEnv="INPUT${prompt}"`;
 
   console.log({ finalPrompt });
 
@@ -56,7 +56,7 @@ app.post("/prompt", async (req, res) => {
   }
 
   if (!match) {
-    finalPrompt = `export WEB3_PRIVATE_KEY=6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0 && lilypad run github.com/arthh/coophive-module:v2 -i PromptEnv="PROMPT=${prompt}"`;
+    finalPrompt = `export WEB3_PRIVATE_KEY=6bec59d4979fdaaf7f4b7174b84332246fb89e42b159e930bf7ea2351483b5a0 && lilypad run github.com/LeoFranklin015/coophiveAgent:34c3403f4cafd7247294fafecdc9a770e319f661 -i PromptEnv="INPUT=${prompt}"`;
     output = shell.exec(finalPrompt);
     regex = /open (\/tmp\/lilypad\/data\/downloaded-files\/[^\s]+)/;
     match = output.stdout.match(regex)?.[1]?.trim();
@@ -72,7 +72,7 @@ app.post("/prompt", async (req, res) => {
   }
 
   if (!match) {
-    finalPrompt = `docker run -e PROMPT="${prompt}" leofranklin1509/projectsmith@sha256:7192a0f26a073747547d8f04a63df13c93596a0bea15bccc10ef88244fc89242`;
+    finalPrompt = `docker run -e PROMPT="${prompt}" leofranklin1509/projectsmith@leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b`;
     output = shell.exec(finalPrompt);
     regex = /(?<=Start of reply - ).*?(?= - end of reply)/;
     console.log(output.stdout);

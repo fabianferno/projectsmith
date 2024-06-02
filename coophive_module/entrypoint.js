@@ -73,10 +73,7 @@ async function main() {
       JSON.stringify(allMessages, null, 2),
       "utf-8"
     )
-    .then(() => {
-      console.log("File has been saved successfully.");
-      return fs.readFile("./outputs/response.json", "utf-8");
-    })
+
     .then((data) => {
       console.log("File content:", data);
     })
