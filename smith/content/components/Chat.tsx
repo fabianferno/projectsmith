@@ -65,7 +65,30 @@ const ChatComponent = ({ data }: { data: any }) => {
     if (input.toLowerCase().includes("agent")) {
       alert("Agent invoked");
 
+      const payload = {
+        prompt: input,
+      };
       // TODO: Agent Invoke call
+      try {
+        const response = await fetch("http://localhost:4000/prompt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        // Check if the response is successful
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Success:", data);
+        // Handle the response data here
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
 
     if (!input.trim()) return;

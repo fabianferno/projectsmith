@@ -10,15 +10,15 @@
       "Deal": {
         "Concurrency": 1
       },
-     "Docker": {
-                "Entrypoint": [
-                    "node entrypoint.js"
-                ],
-                "Image": "leofranklin1509/projectsmith@sha256:59fb5c1c5ed19704539448b13fd6af92443088a9e4e4497636df332b49f343d4",
-                "EnvironmentVariables": [
-                    "PROMPT={{.PROMPT}}"
-                ]
-            },
+      "Docker": {
+        "Entrypoint": [
+          "node entrypoint.js"
+        ],
+        "Image": "leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b",
+        "EnvironmentVariables": [
+          "INPUT={{.INPUT}}"
+        ]
+      },
       "Engine": "Docker",
       "Network": {
         "Type": "None"
