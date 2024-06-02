@@ -1,0 +1,44 @@
+{
+  "APIVersion": "V1beta1",
+  "Metadata": {
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "Requester": {}
+  },
+  "Spec": {
+    "Engine": "Docker",
+    "EngineSpec": {
+      "Type": "",
+      "Params": null
+    },
+    "PublisherSpec": {
+      "Type": "Ipfs"
+    },
+    "Docker": {
+      "Entrypoint": ["node", "entrypoint.js"],
+      "Image": "leofranklin1509/projectsmith:latest",
+      "EnvironmentVariables": ["PROMPT={{.PROMPT}}"]
+    },
+    "Wasm": {
+      "EntryModule": {}
+    },
+    "Resources": {
+      "CPU": "3",
+      "Memory": "3gb",
+      "GPU": "1"
+    },
+    "Network": {
+      "Type": "None"
+    },
+    "Timeout": 1800,
+    "Outputs": [
+      {
+        "StorageSource": "IPFS",
+        "Name": "outputs",
+        "Path": "/outputs"
+      }
+    ],
+    "Deal": {
+      "Concurrency": 1
+    }
+  }
+}
