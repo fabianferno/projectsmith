@@ -25,7 +25,7 @@ async function getGasInfo() {
   return gasData.data;
 }
 
-const initializeChat = async (contract: Contract) => {
+const initializeChat = async (contract: Contract, input: string) => {
   const gasData = await getGasInfo();
 
   if (chatId === null) {
@@ -33,7 +33,7 @@ const initializeChat = async (contract: Contract) => {
     const transactionResponse = await contract.startChat(`
           You are a blockchain data  analyst and your task is to analyze the following data:
 
-            ${JSON.stringify(gasData)}
+            ${JSON.stringify(gasData)} ${input}
 
             Use the context and return only yes or no. Is it advisable to make a swap this week? 
       `);
@@ -93,7 +93,7 @@ const addMessage = async (
   await fetchMessages(contract);
 };
 
-async function main() {
+async function main(input: string) {
   const privateKey = process.env.PRIVATE_KEY;
   const contractAddress = "0xbb28197bccAA45A19dBedC67eFf63c86Ac92Fd2b";
 
@@ -103,7 +103,7 @@ async function main() {
 
   let iterations = 5;
 
-  await initializeChat(contract);
+  await initializeChat(contract, input);
 
   // TODO: AI Agent to run the swap if the based on the gas data from getGasInfo
   while (true) {
@@ -137,4 +137,4 @@ async function main() {
   }
 }
 
-main();
+main("something");
