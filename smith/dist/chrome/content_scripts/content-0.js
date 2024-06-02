@@ -422,6 +422,13 @@ const ChatComponent = ({
   const handleMessageSubmit = async e => {
     console.log("Sending message...");
     e.preventDefault();
+
+    // Check if input contains the word agent
+    if (input.toLowerCase().includes("agent")) {
+      alert("Agent invoked");
+
+      // TODO: Agent Invoke call
+    }
     if (!input.trim()) return;
     const transactionResponse = await contract.addMessage(input, chatId);
     const receipt = await transactionResponse.wait();
@@ -451,7 +458,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 90,
+      lineNumber: 97,
       columnNumber: 10
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
@@ -460,7 +467,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 91,
+      lineNumber: 98,
       columnNumber: 7
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -472,7 +479,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 92,
+      lineNumber: 99,
       columnNumber: 9
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -481,7 +488,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 93,
+      lineNumber: 100,
       columnNumber: 9
     }
   }, "\uD83D\uDD03"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -490,7 +497,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96,
+      lineNumber: 103,
       columnNumber: 9
     }
   }, "Send Message")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
@@ -501,7 +508,7 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 100,
+      lineNumber: 107,
       columnNumber: 7
     }
   }, messages.map((msg, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
@@ -510,14 +517,14 @@ const ChatComponent = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 103,
+      lineNumber: 110,
       columnNumber: 39
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 104,
+      lineNumber: 111,
       columnNumber: 13
     }
   }, msg.role, ":"), " ", msg.content))));
@@ -75732,7 +75739,7 @@ module.exports = JSON.parse('[{"inputs":[{"internalType":"address","name":"initi
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3d45f091220cdfcd72bb")
+/******/ 		__webpack_require__.h = () => ("3e88718c4d29f7c3b643")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
