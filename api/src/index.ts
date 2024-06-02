@@ -72,11 +72,12 @@ app.post("/prompt", async (req, res) => {
   }
 
   if (!match) {
-    finalPrompt = `docker run -e PROMPT="${prompt}" leofranklin1509/projectsmith@leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b`;
+    finalPrompt = ` docker run -e INPUT="${prompt}" leofranklin1509/projectsmith@sha256:7848605ef95ea76153125316360cba1d909bbdeec834b9652f2f456ee837df1b`;
     output = shell.exec(finalPrompt);
-    regex = /(?<=Start of reply - ).*?(?= - end of reply)/;
+    // regex = /(?<=Start of reply - ).*?(?= - end of reply)/;
     console.log(output.stdout);
-    match = output.stdout.split("allMessages")[0] || "No match found";
+    // match = output.stdout.split("allMessages")[0] || "No match found";
+    match = output.stdout;
   }
 
   res.send(match);
