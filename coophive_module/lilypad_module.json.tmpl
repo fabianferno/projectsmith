@@ -1,0 +1,42 @@
+{
+  "machine": {
+    "gpu": 0,
+    "cpu": 1000,
+    "ram": 100
+  },
+  "job": {
+    "APIVersion": "V1beta1",
+    "Spec": {
+      "Deal": {
+        "Concurrency": 1
+      },
+     "Docker": {
+                "Entrypoint": [
+                    "node entrypoint.js"
+                ],
+                "Image": "leofranklin1509/projectsmith@sha256:59fb5c1c5ed19704539448b13fd6af92443088a9e4e4497636df332b49f343d4",
+                "EnvironmentVariables": [
+                    "PROMPT={{.PROMPT}}"
+                ]
+            },
+      "Engine": "Docker",
+      "Network": {
+        "Type": "None"
+      },
+      "PublisherSpec": {
+        "Type": "IPFS"
+      },
+      "Resources": {
+        "GPU": ""
+      },
+      "Outputs": [
+        {
+          "Name": "outputs",
+          "Path": "/outputs"
+        }
+      ],
+      "Timeout": 1800,
+      "Verifier": "Noop"
+    }
+  }
+}
